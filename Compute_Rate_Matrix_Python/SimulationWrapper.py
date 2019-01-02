@@ -19,18 +19,22 @@ if __name__ == "__main__":
     parametersDF = pd.read_csv(args.parameterFile, index_col=0)
     outputPath = os.path.abspath(args.outputPath)
     
-    rateMatrixPath = os.path.join(outputPath, 'RateMatrix_py.mat')
-    ProbsPath = os.path.join(outputPath, 'Probs_py.mat')
+    rateMatrixPath = os.path.join(outputPath, 'RateMatrix')
+    eigenValuesPath =  os.path.join(outputPath, 'EigenValues')
+    probVecPath =  os.path.join(outputPath, 'ProbVec')
+    prob2DPath = os.path.join(outputPath, 'Prob2D')
     
     for row in parametersDF.itertuples():
         print(row)
-    
+        saveFileName = 'set_{:05}.mat'.format(row.Index)
+
         # Calculating and saving rate matrix
         RateMatrix, Dimensions = Compute_RateMatrix_MISAEx.main(row)
         RateMatrix = lil_matrix(RateMatrix)
-        sio.savemat(rateMatrixPath, {'RateMatrix': RateMatrix, 'Dimensions': Dimensions})
+        sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions})
     
         # Calculating and saving ProbVec, Prob2D and eigenvalues
         eigenValues, probVec, prob2D = calc_probvec_prob2d(RateMatrix, Dimensions)
-        sio.savemat(ProbsPath, {'EigenValues': eigenValues, 'ProbVec': probVec, 'Prob2d': prob2D})
-
+        sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
+        sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
+        sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
