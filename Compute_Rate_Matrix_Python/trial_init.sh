@@ -3,17 +3,19 @@ PARAM_CSV=parameter_files/paramValues_3.csv
 MODEL_FILE=Compute_RateMatrix_MISAEx
 # NOT IMPLEMENTED: MODEL_FILE is the name of the rate matrix calculation script to be called within the ../models/ folder. 
 
-. ../.directory_save.txt
+PARAM_CSV_REALPATH=$(realpath $PARAM_CSV)
+
+. ../../.directory_save.txt
 
 FILENAME=Trial
 
-FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "Trial*" | sort | wc -l)
+FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | wc -l)
 FILES="$(echo "$FILES" | sed -e 's/^[ \t]*//')"
 
 if [ "$FILES" != "0" ] ; then
     echo Creating new trial folder
 	
-	LATEST=$(basename "$(find "$RESULTSDIR/" -maxdepth 1 -name "Trial*" | sort | tail -1)") #Gets latest trial folder
+	LATEST=$(basename "$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | tail -1)") #Gets latest trial folder
 	HEAD=${LATEST#*_} #Deletes everything before _
 	NUM=${HEAD%-*} #Deletes everything after -
 	NUM=$(echo $NUM | sed 's/^0*//') #Removes padded zeros
@@ -37,4 +39,4 @@ mkdir "$NEWFOLDER"/EigenValues
 
 cp ${PARAM_CSV} "${NEWFOLDER}"/paramValues.csv
 
-python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}"
+python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV_REALPATH}"
