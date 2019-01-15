@@ -9,4 +9,6 @@ def calc_probvec_prob2d(matrix, dimensions, dims_to_reduce=(2,3), nsig=15, sigma
     prob_full_d = prob_vec.reshape(dimensions, order='F')
     prob_2d = np.sum(prob_full_d, axis=dims_to_reduce)
 
-    return eigen_values, prob_vec, prob_2d
+    time_scales = -np.divide(1, eigen_values[1:].real)
+
+    return eigen_values, prob_vec, prob_2d, time_scales

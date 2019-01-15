@@ -22,17 +22,21 @@ if __name__ == "__main__":
     eigenValuesPath =  os.path.join(outputPath, 'EigenValues')
     probVecPath =  os.path.join(outputPath, 'ProbVec')
     prob2DPath = os.path.join(outputPath, 'Prob2D')
+    timeScalesPath = os.path.join(outputPath, 'TimeScales')
     
     for row in parametersDF.itertuples():
         print(row)
         saveFileName = 'set_{:05}.mat'.format(row.Index)
 
         # Calculating and saving rate matrix
-        RateMatrix, Dimensions = Compute_RateMatrix_MISAEx.main(row)
+        RateMatrix, Dimensions, StatesDict = Compute_RateMatrix_MISAEx.main(row)
         sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions})
     
         # Calculating and saving ProbVec, Prob2D and eigenvalues
-        eigenValues, probVec, prob2D = calc_probvec_prob2d(RateMatrix, Dimensions)
+        eigenValues, probVec, prob2D, timeScales = calc_probvec_prob2d(RateMatrix, Dimensions)
         sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
         sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
         sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
+        sio.savemat(os.path.join(timeScalesPath, saveFileName), {'TimeScales': timeScales})
+
+    np.save(os.path.join(outputPath, 'StatesDict.npy'), StatesDict)

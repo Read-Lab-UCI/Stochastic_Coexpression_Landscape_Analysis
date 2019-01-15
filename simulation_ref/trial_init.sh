@@ -33,8 +33,10 @@ mkdir "$NEWFOLDER"/RateMatrix
 mkdir "$NEWFOLDER"/ProbVec
 mkdir "$NEWFOLDER"/Prob2D
 mkdir "$NEWFOLDER"/Analysis
+mkdir "$NEWFOLDER"/TimeScales
+mkdir "$NEWFOLDER"/EigenValues
 
 # Runs python script to generate python parameters for the trial and appends to .trialdir_save.txt
 cp ${PARAM_CSV} "$NEWFOLDER"/paramValues.csv
 echo $NEWFOLDER
-#matlab -nodisplay -nodesktop -nosplash -r "SimulationWrapper(\"${NEWFOLDER}\", \"${MODEL_FILE}\")"; 
+matlab -nodisplay -nodesktop -nosplash -r "SimulationWrapper(\"${NEWFOLDER}\", \"${MODEL_FILE}\")"; 

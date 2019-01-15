@@ -1,7 +1,7 @@
 %function [] = SimulationWrapper(trialFolder, modelFile)
 % This wrapper should call all necessary scripts to calculate the RateMatrix for a given model
 function [] = SimulationWrapper()
-trialFolder = "../outputs_tmp/Trial_0001";
+trialFolder = "../outputs_tmp/Trial_0002";
 modelFile = "Compute_RateMatrix_MISAEx";
 % Saving paths to Map object corresponding to bash variable names, see directoryPaths.keys and .values. Adding model folder path.
 addpath('models/', '-end');

@@ -10,6 +10,8 @@ paramSetNumFormatted = sprintf('set_%05d',paramSetNum);
 % Generating paths to save files
 ProbVecFile=strcat(trialFolder, '/ProbVec/', paramSetNumFormatted, '.mat');
 Prob2DFile=strcat(trialFolder, '/Prob2D/', paramSetNumFormatted, '.mat');
+EigenValuesFile=strcat(trialFolder, '/EigenValues/', paramSetNumFormatted, '.mat');
+TimeScalesFile=strcat(trialFolder, '/TimeScales/', paramSetNumFormatted, '.mat');
 
 %Calculating NSig eigenvalues and saving eigenvalues and timescales
 NSig=15;
@@ -18,6 +20,10 @@ sigma=1E-12;
 
 % Calculating and saving probvec
 ProbVec=RightEigenVectors(:,1)/sum(RightEigenVectors(:,1));
+
+% Calculating TimeScales
+EigenVals_r=real(diag(EigenValues));
+TimeScales=-1./EigenVals_r(2:end);
 
 NDims=numel(Dimensions);
 NStates=prod(Dimensions); %total number of states
@@ -34,7 +40,9 @@ for ii=1:numel(OtherDims);
     RemainDims=setdiff(RemainDims,OtherDims(ii));
 end;
 
+save(TimeScalesFile,'TimeScales');
 save(ProbVecFile,'ProbVec');
 save(Prob2DFile, 'Prob2D');
+save(EigenValuesFile,'EigenValues');
 end
 

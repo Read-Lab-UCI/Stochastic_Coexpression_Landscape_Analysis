@@ -142,4 +142,4 @@ def main(inputs):
     StatesDict = Determine_StatesDict(Dimensions, GeneA_States, GeneB_States)
     RateMatrix = Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn)
 
-    return RateMatrix, Dimensions
+    return RateMatrix, Dimensions, StatesDict
