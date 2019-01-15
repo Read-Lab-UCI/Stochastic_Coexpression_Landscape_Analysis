@@ -1,4 +1,6 @@
 import numpy as np
+import scipy.io as sio
+from scipy.special import factorial
 from .common_calcs import rate_calc
 
 def MISA_Ex_Rxn(parameters):
@@ -133,7 +135,10 @@ def Calc_RateMatrix( Rxn, A, B, Smalls, Bigs, NumStates, NumSpec, NumRxn, GeneA_
                             par = Rxn['Parameters'][m]
                             law = Rxn['Law'][m,:]
                             rate_total = rate_total + rate_calc(Cur, law, par)
+                            #rate_total = rate_total + (par * np.prod(np.divide(np.power(Cur, law), factorial(law))))
                     RateMatrix[DestInd, CurInd] = rate_total
+                    print(rate_total)
+    sio.savemat('outputpy.mat', {'RateMatrix': RateMatrix})
     RateMatrix = RateMatrix - np.diagflat(RateMatrix.sum(axis=0))
     return RateMatrix, Dimensions
 

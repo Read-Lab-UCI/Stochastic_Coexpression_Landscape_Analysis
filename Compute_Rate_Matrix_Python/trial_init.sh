@@ -1,12 +1,12 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/paramValues_3.csv
+PARAM_CSV=parameter_files/paramValues_test.csv
 MODEL_FILE=Compute_RateMatrix_MISAEx
 # NOT IMPLEMENTED: MODEL_FILE is the name of the rate matrix calculation script to be called within the ../models/ folder. 
 
 PARAM_CSV_REALPATH=$(realpath $PARAM_CSV)
 
-. ../../.directory_save.txt
-
+#. ../../.directory_save.txt
+RESULTSDIR="../outputs_tmp/"
 FILENAME=Trial
 
 FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | wc -l)
