@@ -1,7 +1,6 @@
 import numpy as np
-import scipy.io as sio
-from scipy.special import factorial
-from .common_calcs import rate_calc
+from scipy.sparse import coo_matrix
+from .common_calcs import Update_RateMatrix
 
 def MISA_Ex_Rxn(parameters):
     # Parameters and model name
@@ -21,19 +20,21 @@ def MISA_Ex_Rxn(parameters):
     A = list(range(N+1))
     B = list(range(N+1))
 
-    # Defining Gene States, Microstates, and their limits
+    # Defining Gene States
     GeneA_00, GeneA_01, GeneA_10 = [0,1], [0,1], [0,1]
     GeneB_00, GeneB_01, GeneB_10 = [0,1], [0,1], [0,1]
-    NumStates = len(A) * len(B) * 3 * 3 # New name for NS
-    Smalls = np.array([A[0], B[0], GeneA_00[0], GeneA_01[0], GeneA_10[0], GeneB_00[0], GeneB_01[0], GeneB_10[0]], dtype=int)
-    Bigs = np.array([A[-1], B[-1], GeneA_00[-1], GeneA_01[-1], GeneA_10[-1], GeneB_00[-1], GeneB_01[-1], GeneB_10[-1]], dtype=int)
+    GeneA_States=[[1,0,0], [0,1,0], [0,0,1]]
+    GeneB_States=[[1,0,0], [0,1,0], [0,0,1]]
+
+    # Number of Microstate = CopyA * CopyB * GeneStatesA * GeneStatesB
+    NumStates = (N+1) * (N+1) * 3 * 3
 
     # Initializing Rxn dict to hold Reactions, Species and Parameters
     Rxn = {}
     NumRxn = 16
     NumSpec = 8
 
-    Rxn['Parameters'] = [g0,g1,g0,ha,hr,fa,fr,kd,g0,g1,g0,ha,hr,fa,fr,kd]
+    Rxn['Parameters'] = np.array([g0,g1,g0,ha,hr,fa,fr,kd,g0,g1,g0,ha,hr,fa,fr,kd])
     Rxn['Law'] = np.zeros((NumRxn, NumSpec), dtype=int)
     Rxn['Stoich'] = np.zeros((NumRxn, NumSpec), dtype=int)
 
@@ -95,55 +96,50 @@ def MISA_Ex_Rxn(parameters):
     Rxn['Stoich'][14,5] = 1
     Rxn['Stoich'][15,1] = -1
 
-    GeneA_States=[[1,0,0],
-                  [0,1,0],
-                  [0,0,1]];
-    GeneB_States=[[1,0,0],
-                  [0,1,0],
-                  [0,0,1]];
-
-    return Rxn, A, B, Smalls, Bigs, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States
+    return Rxn, A, B, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States
 
 
-def Calc_RateMatrix( Rxn, A, B, Smalls, Bigs, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States):
-    Dimensions = [len(A), len(B), 3, 3]
-    StatesList = np.zeros((NumStates, NumSpec))
-    RateMatrix = np.zeros((NumStates, NumStates))
-    
-    TestinRange = [0 for i in range(NumSpec*2)]
-    Cur = np.zeros((NumSpec,), dtype=int)
-    for i in range(len(A)):
-        for j in range(len(B)):
-            for k in range(len(GeneA_States)):
-                for l in range(len(GeneB_States)):
-                    Cur[:] = A[i], B[j], *GeneA_States[k], *GeneB_States[l]
+def Determine_StatesDict(Dimensions, GeneA_States, GeneB_States):
+    # original stateslist creation, returns ordered numpy array
+    States_dict = {}
+
+    for i in range(Dimensions[0]):
+        for j in range(Dimensions[1]):
+            for k in range(Dimensions[2]):
+                for l in range(Dimensions[3]):
+                    Cur = (i, j, *GeneA_States[k], *GeneB_States[l])
                     CurInd = np.ravel_multi_index((i, j, k, l), Dimensions, order='F')
-                    StatesList[CurInd,:] = Cur
-                    rate_total = 0.0
-                    for m in range(NumRxn):
-                        TestDest = Cur + Rxn['Stoich'][m,:]
-                        TestinRange[0:NumSpec] = np.greater_equal(TestDest, Smalls)
-                        TestinRange[NumSpec:] = np.less_equal(TestDest, Bigs)
-                        if all(TestinRange):
-                            GeneA_Dest = TestDest[2:5]
-                            GeneB_Dest = TestDest[5:8]
-                            GAind = GeneA_Dest.nonzero()[0][0]
-                            GBind = GeneB_Dest.nonzero()[0][0]
-                            Aind = TestDest[0]
-                            Bind = TestDest[1]
-                            DestInd = np.ravel_multi_index((Aind, Bind, GAind, GBind), Dimensions, order='F')
-                            par = Rxn['Parameters'][m]
-                            law = Rxn['Law'][m,:]
-                            rate_total = rate_total + rate_calc(Cur, law, par)
-                            #rate_total = rate_total + (par * np.prod(np.divide(np.power(Cur, law), factorial(law))))
-                    RateMatrix[DestInd, CurInd] = rate_total
-                    print(rate_total)
-    sio.savemat('outputpy.mat', {'RateMatrix': RateMatrix})
-    RateMatrix = RateMatrix - np.diagflat(RateMatrix.sum(axis=0))
-    return RateMatrix, Dimensions
+                    States_dict[Cur] = CurInd
+    return States_dict
 
+
+def Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn):
+    StatesKeys = set(StatesDict.keys())
+    MaxNumInteractions = NumStates * NumRxn
+    CurInd_vals = np.zeros((MaxNumInteractions))
+    DestInd_vals = np.zeros((MaxNumInteractions))
+    RateMatrix_vals = np.zeros((MaxNumInteractions))
+
+    n=0
+    for state in StatesKeys:
+        Cur = np.array(state, dtype=int)
+        CurInd = StatesDict[state]
+        for m in range(NumRxn):
+            TestDest = tuple(Cur + Rxn['Stoich'][m,:])
+            if TestDest in StatesKeys:
+                n=n+1
+                DestInd = StatesDict[TestDest]
+                CurInd_vals, DestInd_vals, RateMatrix_vals = Update_RateMatrix(CurInd_vals, DestInd_vals, RateMatrix_vals, Cur, CurInd, DestInd, Rxn['Parameters'], Rxn['Law'], m, n)
+
+    RateMatrix = coo_matrix((RateMatrix_vals, (DestInd_vals, CurInd_vals)), shape=(NumStates, NumStates)).tolil()
+    RateMatrix.setdiag((RateMatrix.diagonal() - RateMatrix.sum(axis=0)).A[0])
+
+    return RateMatrix
 
 def main(inputs):
-    Rxn, A, B, Smalls, Bigs, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States = MISA_Ex_Rxn(inputs)
-    RateMatrix, Dimensions = Calc_RateMatrix( Rxn, A, B, Smalls, Bigs, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States)
+    Rxn, A, B, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States = MISA_Ex_Rxn(inputs)
+    Dimensions = [len(A), len(B), len(GeneA_States), len(GeneB_States)]
+    StatesDict = Determine_StatesDict(Dimensions, GeneA_States, GeneB_States)
+    RateMatrix = Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn)
+
     return RateMatrix, Dimensions

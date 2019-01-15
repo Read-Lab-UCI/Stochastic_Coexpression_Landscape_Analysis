@@ -1,5 +1,5 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/paramValues_test.csv
+PARAM_CSV=../outputs_tmp/Trial_0001/paramValues.csv
 MODEL_FILE=Compute_RateMatrix_MISAEx
 # NOT IMPLEMENTED: MODEL_FILE is the name of the rate matrix calculation script to be called within the ../models/ folder. 
 
@@ -36,7 +36,5 @@ mkdir "$NEWFOLDER"/ProbVec
 mkdir "$NEWFOLDER"/Prob2D
 mkdir "$NEWFOLDER"/EigenValues
 #mkdir "$NEWFOLDER"/Analysis
-
-cp ${PARAM_CSV} "${NEWFOLDER}"/paramValues.csv
 
 python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV_REALPATH}"

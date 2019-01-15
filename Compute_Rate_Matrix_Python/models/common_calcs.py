@@ -1,13 +1,18 @@
 from numba.decorators import jit
 
-@jit('f8(i8[:], i8[:], f8)')
-def rate_calc(cur, law, rate):
-    tmp1 = 0
-    tmp2 = 1
-    for i in range(cur.shape[0]):
-        tmp1 = cur[i]**law[i]
+@jit('Tuple((f8[:], f8[:], f8[:]))(f8[:], f8[:], f8[:], i8[:], i8, i8, f8[:], i8[:,:], i8, i8)')
+def Update_RateMatrix(CurInd_vals, DestInd_vals, RateMatrix_vals, Cur, CurInd, DestInd, parameters, laws, m, n):
+    par = parameters[m]
+    law = laws[m,:]
+    for i in range(Cur.shape[0]):
+        tmp1 = Cur[i]**law[i]
         tmp2 = 1
         for j in range(law[i]):
             tmp2 = tmp2 * (j+1)
-        rate = rate * (tmp1/tmp2)
-    return rate 
+        par = par * (tmp1/tmp2)
+
+    CurInd_vals[n] = CurInd
+    DestInd_vals[n] = DestInd
+    RateMatrix_vals[n] = par
+
+    return CurInd_vals, DestInd_vals, RateMatrix_vals

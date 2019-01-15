@@ -2,7 +2,6 @@ import os
 import argparse
 import pandas as pd
 import scipy.io as sio
-from scipy.sparse import lil_matrix
 
 from models import Compute_RateMatrix_MISAEx
 from RateMatrix_Calcs import calc_probvec_prob2d
@@ -30,7 +29,6 @@ if __name__ == "__main__":
 
         # Calculating and saving rate matrix
         RateMatrix, Dimensions = Compute_RateMatrix_MISAEx.main(row)
-        RateMatrix = lil_matrix(RateMatrix)
         sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions})
     
         # Calculating and saving ProbVec, Prob2D and eigenvalues
