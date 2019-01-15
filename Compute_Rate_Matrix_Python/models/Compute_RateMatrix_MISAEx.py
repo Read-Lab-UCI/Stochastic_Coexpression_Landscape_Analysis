@@ -133,6 +133,7 @@ def Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn):
 
     RateMatrix = coo_matrix((RateMatrix_vals, (DestInd_vals, CurInd_vals)), shape=(NumStates, NumStates)).tolil()
     RateMatrix.setdiag((RateMatrix.diagonal() - RateMatrix.sum(axis=0)).A[0])
+    RateMatrix = RateMatrix.tocsc()
 
     return RateMatrix
 
