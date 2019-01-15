@@ -160,7 +160,7 @@ for ii=1:numel(A);
     end;
 end;
 toc
-save('outputml.mat','RateMatrix')
+
 % Making columns in rate matrix sum to 0
 RateMatrix=RateMatrix-diag(sum(RateMatrix));
 
