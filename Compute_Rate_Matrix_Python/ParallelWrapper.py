@@ -1,4 +1,5 @@
 import os
+import argparse
 import multiprocessing as mp
 import pandas as pd
 import scipy.io as sio
@@ -46,12 +47,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
     parametersDF = pd.read_csv(args.parameterFile, index_col=0)
     outputPath = os.path.abspath(args.outputPath)
-    
+    parametersDF['OutputPath'] = outputPath
+ 
     tups = parametersDF.itertuples(name=None)
     
     # Workers
     num_workers = _workers_count()
-    
+    print(num_workers)
     # Initiating pool
-    pool2 = mp.Pool(processes=num_workers)
-    results = pool2.map_async(parallel_wrapper, tups).get()
+    print('Starting pool')
+    pool = mp.Pool(processes=num_workers)
+    results = pool.map_async(parallel_wrapper, tups).get()
