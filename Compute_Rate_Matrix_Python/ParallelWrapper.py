@@ -30,7 +30,7 @@ def parallel_wrapper(row):
     RateMatrix, Dimensions, StatesDict = Compute_RateMatrix_MISAEx_parallel.main(row)
     eigenValues, probVec, prob2D, timeScales = calc_probvec_prob2d(RateMatrix, Dimensions)
     # Saving
-    sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions})
+    sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, do_compression = True)
     sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
     sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
     sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})

@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
         # Calculating and saving rate matrix
         RateMatrix, Dimensions, StatesDict = Compute_RateMatrix_MISAEx.main(row)
-        sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions})
+        sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, , do_compression = True)
     
         # Calculating and saving ProbVec, Prob2D and eigenvalues
         eigenValues, probVec, prob2D, timeScales = calc_probvec_prob2d(RateMatrix, Dimensions)
