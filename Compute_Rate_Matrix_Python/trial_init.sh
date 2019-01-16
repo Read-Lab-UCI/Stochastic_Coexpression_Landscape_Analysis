@@ -1,9 +1,10 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/paramValues_3.csv
+PARAM_CSV=parameter_files/paramValues.csv
+RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_MISAEx
 # NOT IMPLEMENTED: MODEL_FILE is the name of the rate matrix calculation script to be called within the ../models/ folder. 
 
-PARAM_CSV_REALPATH=$(realpath $PARAM_CSV)
+#PARAM_CSV_REALPATH=$(realpath $PARAM_CSV)
 
 #. ../../.directory_save.txt
 RESULTSDIR="../outputs_tmp"
@@ -40,4 +41,8 @@ mkdir "$NEWFOLDER"/TimeScales
 
 cp ${PARAM_CSV} "${NEWFOLDER}"/paramValues.csv
 
-python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV_REALPATH}"
+if [ "$RUNPARALLEL" = true ]; then
+    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -pe
+else
+    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}"
+fi

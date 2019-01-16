@@ -5,15 +5,14 @@ from .common_calcs import Update_RateMatrix
 def MISA_Ex_Rxn(parameters):
     # Parameters and model name
     model = 'MISAEx'
-    paramSetNum = parameters.Index
-    N = parameters.N
-    g0 = parameters.g0
-    g1 = parameters.g1
-    kd = parameters.kd
-    ha = parameters.ha
-    hr = parameters.hr
-    fa = parameters.fa
-    fr = parameters.fr
+    N = parameters[1]
+    g0 = parameters[2]
+    g1 = parameters[3]
+    kd = parameters[4]
+    ha = parameters[5]
+    hr = parameters[6]
+    fa = parameters[7]
+    fr = parameters[8]
     model_name = model + '_N{}'.format(N)
 
     # Copy number lists

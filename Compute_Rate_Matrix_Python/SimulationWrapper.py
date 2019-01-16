@@ -1,42 +1,72 @@
 import os
 import argparse
+import multiprocessing as mp
+import numpy as np
 import pandas as pd
 import scipy.io as sio
 
 from models import Compute_RateMatrix_MISAEx
-from RateMatrix_Calcs import calc_probvec_prob2d
+from RateMatrix_Calcs import basic_calcs
 
 
-if __name__ == "__main__":
-    # Declaring argument parsers and flags
+def _workers_count():
+    cpu_count = 1
+    try:
+        cpu_count = len(os.sched_getaffinity(0))
+    except AttributeError:
+        cpu_count = os.cpu_count()
+    return cpu_count
+
+
+def wrapper(row):
+    # Building Paths
+    rateMatrixPath = os.path.join(row[-1], 'RateMatrix')
+    eigenValuesPath =  os.path.join(row[-1], 'EigenValues')
+    probVecPath =  os.path.join(row[-1], 'ProbVec')
+    prob2DPath = os.path.join(row[-1], 'Prob2D')
+    timeScalesPath = os.path.join(row[-1], 'TimeScales')
+    statesDictPath = os.path.join(outputPath, 'StatesDict.npy')
+    saveFileName = 'set_{:05}.mat'.format(row[0])
+    
+    # Calculating
+    RateMatrix, Dimensions, StatesDict = Compute_RateMatrix_MISAEx.main(row)
+    eigenValues, probVec, prob2D, timeScales = basic_calcs(RateMatrix, Dimensions)
+    # Saving
+    sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, do_compression = True)
+    sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
+    sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
+    sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
+    sio.savemat(os.path.join(timeScalesPath, saveFileName), {'TimeScales': timeScales})
+
+    if not os.path.isfile(statesDictPath):
+        np.save(os.path.join(outputPath, 'StatesDict.npy'), StatesDict)
+
+
+
+if __name__ == '__main__':
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--parameter", dest="parameterFile", help="Parameter csv file that contains the parameters for the simulations.", required=True)
     parser.add_argument("-o", "--output", dest="outputPath", help="Folder path to output simulation results to.", required=True)
+    parser.add_argument("-pe", "--parallel", dest="runParallel", action='store_true', help="When -pe called, simulations will attempt to be run in parallel")
 
     # Load inputs
     args = parser.parse_args()
     parametersDF = pd.read_csv(args.parameterFile, index_col=0)
     outputPath = os.path.abspath(args.outputPath)
+    parametersDF['OutputPath'] = outputPath
+ 
+    if args.runParallel:
+        tups = parametersDF.itertuples(name=None)
     
-    rateMatrixPath = os.path.join(outputPath, 'RateMatrix')
-    eigenValuesPath =  os.path.join(outputPath, 'EigenValues')
-    probVecPath =  os.path.join(outputPath, 'ProbVec')
-    prob2DPath = os.path.join(outputPath, 'Prob2D')
-    timeScalesPath = os.path.join(outputPath, 'TimeScales')
+        # Workers
+        num_workers = _workers_count()
     
-    for row in parametersDF.itertuples():
-        print(row)
-        saveFileName = 'set_{:05}.mat'.format(row.Index)
-
-        # Calculating and saving rate matrix
-        RateMatrix, Dimensions, StatesDict = Compute_RateMatrix_MISAEx.main(row)
-        sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, , do_compression = True)
-    
-        # Calculating and saving ProbVec, Prob2D and eigenvalues
-        eigenValues, probVec, prob2D, timeScales = calc_probvec_prob2d(RateMatrix, Dimensions)
-        sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
-        sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
-        sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
-        sio.savemat(os.path.join(timeScalesPath, saveFileName), {'TimeScales': timeScales})
-
-    np.save(os.path.join(outputPath, 'StatesDict.npy'), StatesDict)
+        # Initiating pool
+        print('Starting pool with', num_workers, 'workers')
+        pool = mp.Pool(processes=num_workers)
+        results = pool.map_async(wrapper, tups).get()
+    else:
+        print('Running simulations sequentially')
+        for row in parametersDF.itertuples(name=None):
+            wrapper(row)
