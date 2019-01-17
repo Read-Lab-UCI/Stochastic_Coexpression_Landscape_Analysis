@@ -1,11 +1,11 @@
 import os
 import argparse
+import importlib
 import multiprocessing as mp
 import numpy as np
 import pandas as pd
 import scipy.io as sio
 
-from models import Compute_RateMatrix_MISAEx
 from RateMatrix_Calcs import basic_calcs
 
 
@@ -29,8 +29,9 @@ def wrapper(row):
     saveFileName = 'set_{:05}.mat'.format(row[0])
     
     # Calculating
-    RateMatrix, Dimensions, StatesDict = Compute_RateMatrix_MISAEx.main(row)
+    RateMatrix, Dimensions, StatesDict = modelFunc.main(row)
     eigenValues, probVec, prob2D, timeScales = basic_calcs(RateMatrix, Dimensions)
+    
     # Saving
     sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, do_compression = True)
     sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
@@ -48,14 +49,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--parameter", dest="parameterFile", help="Parameter csv file that contains the parameters for the simulations.", required=True)
     parser.add_argument("-o", "--output", dest="outputPath", help="Folder path to output simulation results to.", required=True)
+    parser.add_argument("-m", "--model", dest="modelFile", help="Model file used to determine and calculate the RateMatrix, placed inside models/ folder.", required=True)
     parser.add_argument("-pe", "--parallel", dest="runParallel", action='store_true', help="When -pe called, simulations will attempt to be run in parallel")
 
     # Load inputs
     args = parser.parse_args()
+    modelFile = "models." + args.modelFile
     parametersDF = pd.read_csv(args.parameterFile, index_col=0)
     outputPath = os.path.abspath(args.outputPath)
     parametersDF['OutputPath'] = outputPath
- 
+    
+    global modelFunc
+    modelFunc = importlib.import_module(modelFile)
+
     if args.runParallel:
         tups = parametersDF.itertuples(name=None)
     
