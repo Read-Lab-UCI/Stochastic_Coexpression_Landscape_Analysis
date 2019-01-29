@@ -1,6 +1,6 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/paramValues.csv
-RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
+PARAM_CSV=parameter_files/paramValues_3.csv
+RUNPARALLEL=false # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_MISAEx # Python filename that calculates ratematrix, called from models/ folde.r
 
 #. ../../.directory_save.txt

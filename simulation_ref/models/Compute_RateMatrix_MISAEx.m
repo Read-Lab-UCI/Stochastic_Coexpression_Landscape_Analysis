@@ -1,5 +1,4 @@
 function [ ModelName, RateMatrix, Dimensions ] = Compute_RateMatrix_MISAEx( paramSetNum, parameters, trialFolder)
-tic
 % We are interested in the stationary solution to the Master Equation, in
 % vector-matrix form, dP/dt=AP, where P(t) is a time-dependent vector
 % containing the probability for the system to be in each state. We can
@@ -159,7 +158,6 @@ for ii=1:numel(A);
         end;
     end;
 end;
-toc
 
 % Making columns in rate matrix sum to 0
 RateMatrix=RateMatrix-diag(sum(RateMatrix));

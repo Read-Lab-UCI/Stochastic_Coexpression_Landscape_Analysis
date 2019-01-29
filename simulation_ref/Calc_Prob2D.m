@@ -16,7 +16,8 @@ TimeScalesFile=strcat(trialFolder, '/TimeScales/', paramSetNumFormatted, '.mat')
 %Calculating NSig eigenvalues and saving eigenvalues and timescales
 NSig=15;
 sigma=1E-12;
-[RightEigenVectors, EigenValues] = eigs(RateMatrix,NSig,sigma);
+dim=size(RateMatrix);
+[RightEigenVectors, EigenValues] = eigs(RateMatrix,NSig,sigma,'StartVector',ones(dim(1),1));
 
 % Calculating and saving probvec
 ProbVec=RightEigenVectors(:,1)/sum(RightEigenVectors(:,1));
