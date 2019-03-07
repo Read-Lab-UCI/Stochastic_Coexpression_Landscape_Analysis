@@ -4,7 +4,7 @@ RUNPARALLEL=false # set this to true or false to attempt parallel ratematrix cal
 MODEL_FILE=Compute_RateMatrix_MISAEx # Python filename that calculates ratematrix, called from models/ folde.r
 
 #. ../../.directory_save.txt
-RESULTSDIR="../outputs_tmp"
+RESULTSDIR="../Simulation_Results/"
 FILENAME=Trial
 
 FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | wc -l)

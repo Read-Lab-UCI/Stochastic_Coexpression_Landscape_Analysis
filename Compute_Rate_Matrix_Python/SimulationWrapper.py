@@ -31,8 +31,6 @@ def wrapper(row):
     # Calculating
     RateMatrix, Dimensions, StatesDict = modelFunc.main(row)
     eigenValues, probVec, prob2D, timeScales = basic_calcs(RateMatrix, Dimensions)
-    print(probVec[:5])
-    print()
     
     # Saving
     sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, do_compression = True)

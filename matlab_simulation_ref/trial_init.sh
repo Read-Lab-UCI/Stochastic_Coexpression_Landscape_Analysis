@@ -4,7 +4,7 @@ MODEL_FILE=Compute_RateMatrix_MISAEx
 # MODEL_FILE is the name of the rate matrix calculation script to be called within the ../models/ folder. 
   # Do not include the .m file extension
 
-RESULTSDIR="../outputs_tmp/"
+RESULTSDIR="../Simulation_Results/"
 FILENAME=Trial
 
 FILES=$(find "$RESULTSDIR" -maxdepth 1 -name "Trial*" | sort | wc -l)
