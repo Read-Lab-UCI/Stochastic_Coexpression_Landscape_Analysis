@@ -33,7 +33,7 @@ mkdir "$NEWFOLDER"/ProbVec
 mkdir "$NEWFOLDER"/Prob2D
 mkdir "$NEWFOLDER"/EigenValues
 mkdir "$NEWFOLDER"/TimeScales
-#mkdir "$NEWFOLDER"/Analysis
+mkdir "$NEWFOLDER"/Analysis
 
 cp ${PARAM_CSV} "${NEWFOLDER}"/paramValues.csv
 
