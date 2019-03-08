@@ -3,6 +3,7 @@ from scipy.sparse import coo_matrix
 from .common_calcs import Update_RateMatrix
 
 def MISA_Flex_Rxn(parameters):
+    print(parameters)
     # Parameters and model name
     model = 'MISAInc'
     N = parameters[1]
@@ -43,24 +44,38 @@ def MISA_Flex_Rxn(parameters):
     Rxn['Law'][0,2]=1
     Rxn['Law'][1,3]=1
     Rxn['Law'][2,4]=1
-    Rxn['Law'][3,0]=2
-    Rxn['Law'][3,2]=1
-    Rxn['Law'][4,1]=2
+    Rxn['Law'][3,5]=1
+    Rxn['Law'][4,0]=2 
     Rxn['Law'][4,2]=1
-    Rxn['Law'][5,3]=1
-    Rxn['Law'][6,4]=1
-    Rxn['Law'][7,0]=1
-
-    Rxn['Law'][8,5]=1
-    Rxn['Law'][9,6]=1
-    Rxn['Law'][10,7]=1
-    Rxn['Law'][11,1]=2
+    Rxn['Law'][5,1]=2 
+    Rxn['Law'][5,2]=1
+    Rxn['Law'][6,1]=2 
+    Rxn['Law'][6,3]=1
+    Rxn['Law'][7,0]=2 
+    Rxn['Law'][7,4]=1
+    Rxn['Law'][8,3]=1
+    Rxn['Law'][9,4]=1
+    Rxn['Law'][10,5]=1
     Rxn['Law'][11,5]=1
-    Rxn['Law'][12,0]=2
-    Rxn['Law'][12,5]=1
+    Rxn['Law'][12,0]=1
+    
     Rxn['Law'][13,6]=1
     Rxn['Law'][14,7]=1
-    Rxn['Law'][15,1]=1
+    Rxn['Law'][15,8]=1
+    Rxn['Law'][16,9]=1
+    Rxn['Law'][17,1]=2 
+    Rxn['Law'][17,6]=1
+    Rxn['Law'][18,0]=2 
+    Rxn['Law'][18,6]=1
+    Rxn['Law'][19,0]=2 
+    Rxn['Law'][19,7]=1
+    Rxn['Law'][20,1]=2 
+    Rxn['Law'][20,8]=1
+    Rxn['Law'][21,7]=1
+    Rxn['Law'][22,8]=1
+    Rxn['Law'][23,9]=1
+    Rxn['Law'][24,9]=1
+    Rxn['Law'][25,1]=1
 
     # Reaction Stoichiometry, change in species resulting from reaction
     Rxn['Stoich'][0,0] = 1

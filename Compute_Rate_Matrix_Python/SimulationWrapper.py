@@ -58,7 +58,8 @@ if __name__ == '__main__':
     parametersDF = pd.read_csv(args.parameterFile, index_col=0)
     outputPath = os.path.abspath(args.outputPath)
     parametersDF['OutputPath'] = outputPath
-    
+    print(parametersDF)
+    print()
     global modelFunc
     modelFunc = importlib.import_module(modelFile)
 
