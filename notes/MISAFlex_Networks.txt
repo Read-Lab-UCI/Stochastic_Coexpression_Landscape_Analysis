@@ -1,0 +1,24 @@
+	  Gene_Repressor_Activator 
+Rxn1: GeneA_00 -> g0 protA
+Rxn2: GeneA_01 -> g1 protA 
+Rxn3: GeneA_10 -> g0 protA
+Rxn4: GeneA_11 -> g0 protA
+
+      |   BA  |   BA  |   BA  |   BA  |   |   AB  |   AB  |   AB  |   AB
+      | A_00  | A_01  | A_10  | A_11  |   | B_00  | B_01  | B_10  | B_11
+   1  |   g0  |   g0  |   g0  |   g0  |   |   g0  |   g0  |   g0  |   g0
+   2  |   g0  |   g0  |   g0  |   g1  |   |   g0  |   g0  |   g0  |   g1
+   3  |   g0  |   g0  |   g1  |   g0  |   |   g0  |   g0  |   g1  |   g0
+   4  |   g0  |   g0  |   g1  |   g1  |   |   g0  |   g0  |   g1  |   g1
+   5  |   g0  |   g1  |   g0  |   g0  |   |   g0  |   g1  |   g0  |   g0
+   6  |   g0  |   g1  |   g0  |   g1  |   |   g0  |   g1  |   g0  |   g1
+   7  |   g0  |   g1  |   g1  |   g0  |   |   g0  |   g1  |   g1  |   g0
+   8  |   g0  |   g1  |   g1  |   g1  |   |   g0  |   g1  |   g1  |   g1
+   9  |   g1  |   g0  |   g0  |   g0  |   |   g1  |   g0  |   g0  |   g0
+  10  |   g1  |   g0  |   g0  |   g1  |   |   g1  |   g0  |   g0  |   g1
+  11  |   g1  |   g0  |   g1  |   g0  |   |   g1  |   g0  |   g1  |   g0
+  12  |   g1  |   g0  |   g1  |   g1  |   |   g1  |   g0  |   g1  |   g1
+  13  |   g1  |   g1  |   g0  |   g0  |   |   g1  |   g1  |   g0  |   g0
+  14  |   g1  |   g1  |   g0  |   g1  |   |   g1  |   g1  |   g0  |   g1
+  15  |   g1  |   g1  |   g1  |   g0  |   |   g1  |   g1  |   g1  |   g0
+  16  |   g1  |   g1  |   g1  |   g1  |   |   g1  |   g1  |   g1  |   g1

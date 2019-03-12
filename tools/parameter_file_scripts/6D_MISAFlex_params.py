@@ -28,7 +28,7 @@ if __name__ == "__main__":
     
     # Creating logic variation portion
     variedLogicMatrix = list(itertools.product(synthesis_values, repeat=4))
-    
+
     # Creating logic variation portion
     variedParamMatrix = list(itertools.product(binding_values, repeat=4))
     

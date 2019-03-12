@@ -3,7 +3,6 @@ from scipy.sparse import coo_matrix
 from .common_calcs import Update_RateMatrix
 
 def MISA_Flex_Rxn(parameters):
-    print(parameters)
     # Parameters and model name
     model = 'MISAInc'
     N = parameters[1]
