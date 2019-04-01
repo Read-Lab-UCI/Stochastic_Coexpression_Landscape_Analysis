@@ -9,7 +9,7 @@ import pandas as pd
 
 # Values
 # Values
-allParameters = ["N", "kd", "g_a", "g_b", "g_c", "g_d", "ha", "hr", "fa", "fr"]
+allParameters = ["N", "kd", "g0", "g1", "g2", "g3", "ha", "hr", "fa", "fr"]
 parametersToChange = [2, 3, 4, 5, 6, 7, 8, 9] # Indexes of the parameters to be varied in allParameters
 constants = {"N":20,
              "kd":1}  # The values for parameters not being varied
