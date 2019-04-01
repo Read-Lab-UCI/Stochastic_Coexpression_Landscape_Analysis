@@ -1,6 +1,6 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/paramValues_test.csv
-MODEL_FILE=Compute_RateMatrix_MISAEx
+PARAM_CSV=parameter_files/MISAInc_method_testing.csv
+MODEL_FILE=Compute_RateMatrix_MISAInc
 # MODEL_FILE is the name of the rate matrix calculation script to be called within the ../models/ folder. 
   # Do not include the .m file extension
 
@@ -39,4 +39,4 @@ mkdir "$NEWFOLDER"/EigenValues
 # Runs python script to generate python parameters for the trial and appends to .trialdir_save.txt
 cp ${PARAM_CSV} "$NEWFOLDER"/paramValues.csv
 echo $NEWFOLDER
-#matlab -nodisplay -nodesktop -nosplash -r "SimulationWrapper(\"${NEWFOLDER}\", \"${MODEL_FILE}\")"; 
+matlab -nodisplay -nodesktop -nosplash -r "SimulationWrapper(\"${NEWFOLDER}\", \"${MODEL_FILE}\")"; 

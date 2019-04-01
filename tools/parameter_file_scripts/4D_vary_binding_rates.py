@@ -20,7 +20,7 @@ param_max = 1e5
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print('Missing output file path, this will be placed in this  directory.')
+        print('Missing output file path, this will be placed in this directory.')
         csvFileName = sys.argv[0]+'.csv'
     else:
         csvFileName=sys.argv[1]
@@ -51,5 +51,5 @@ if __name__ == "__main__":
         paramDF[key] = constants[key]
     
     paramDF[[allParameters[i] for i in parametersToChange]] = variedParamMatrix
-    
-    paramDF.to_csv('../../simulation/parameter_files/{}'.format(csvFileName))
+
+    paramDF.to_csv(csvFileName)
