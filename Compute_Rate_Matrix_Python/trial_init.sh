@@ -1,6 +1,6 @@
 #!/bin/bash
 PARAM_CSV=parameter_files/paramValues_MISAFlex.csv
-RUNPARALLEL=false # set this to true or false to attempt parallel ratematrix calculations
+RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_MISAFlex # Python filename that calculates ratematrix, called from models/ folder
 
 RESULTSDIR="../Simulation_Results/"
