@@ -18,7 +18,7 @@ if [ "$FILES" != "0" ] ; then
 	NUM=${HEAD%-*} #Deletes everything after -
 	NUM=$(echo $NUM | sed 's/^0*//') #Removes padded zeros
 	
-	((NUM=NUM + 1))
+	NUM=$((NUM + 1))
 	NEWFOLDER="${RESULTSDIR}"${FILENAME}_$(printf "%04d" "$NUM")
 	mkdir "$NEWFOLDER"
 

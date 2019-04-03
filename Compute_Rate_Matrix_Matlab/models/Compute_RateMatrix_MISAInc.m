@@ -1,4 +1,4 @@
-function [ ModelName, RateMatrix ] = Compute_RateMatrix_MISAInc( paramSetNum, parameters, trialFolder)
+function [ ModelName, RateMatrix, Dimensions ] = Compute_RateMatrix_MISAInc( paramSetNum, parameters, trialFolder)
 % We are interested in the stationary solution to the Master Equation, in
 % vector-matrix form, dP/dt=AP, where P(t) is a time-dependent vector
 % containing the probability for the system to be in each state. We can
@@ -146,7 +146,6 @@ GeneB_States=[1,0,0,0;
 StatesList=zeros(NS,NumSpec);
 Dimensions=[numel(A),numel(B),length(GeneA_States),length(GeneB_States)];
 n=0;
-tic
 for ii=1:numel(A);
     for jj=1:numel(B);
         for kk=1:length(GeneA_States);
@@ -188,16 +187,13 @@ for ii=1:numel(A);
         end;
     end;
 end;
-toc   
 % Making columns in rate matrix sum to 0
 RateMatrix=RateMatrix-diag(sum(RateMatrix));
 
 paramSetNumFormatted = sprintf('set_%05d',paramSetNum);
-
+paramSetNumFormatted = sprintf('set_%05d',paramSetNum);
 MatrixFile=strcat(trialFolder, '/RateMatrix/', paramSetNumFormatted, '.mat');
-save(MatrixFile,'RateMatrix','Dimensions','parameters') 
-
-StatesListFile=strcat(trialFolder, '/StatesList/', paramSetNumFormatted, '.mat');
-save(StatesListFile,'StatesList')
+%save('RateMatrix_ml.mat', 'RateMatrix') 
+save(MatrixFile,'RateMatrix','Dimensions','parameters')
 
 end
