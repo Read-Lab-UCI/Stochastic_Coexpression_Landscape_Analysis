@@ -1,5 +1,6 @@
 # User Added
 .directory_save.txt
+.idea/workspace.xml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
