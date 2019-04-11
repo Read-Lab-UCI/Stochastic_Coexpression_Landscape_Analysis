@@ -28,13 +28,6 @@ def wrapper(row):
 
     sim_results = (outputPath, set_formatted, RateMatrix, Dimensions, eigenValues, probVec, prob2D, timeScales)
 
-    # Saving
-    #sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, do_compression = True)
-    # #sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
-    # #sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
-    # #sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
-    # #sio.savemat(os.path.join(timeScalesPath, saveFileName), {'TimeScales': timeScales})
-
     if not os.path.isfile(statesDictPath):
         np.save(os.path.join(outputPath, 'StatesDict.npy'), StatesDict)
     return sim_results
@@ -45,6 +38,15 @@ def output_handler(sim_results):
     h5_file = h5py.File(h5_save_path, "a")
 
     for sim_result in sim_results:
+        # Breaking down Rate Matrix to allow for HDF5 saving
+        # See https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html for reconstruction info
+        g = h5_file.create_group('RateMatrix/' + sim_result[1])
+        g.create_dataset('data', data=sim_result[2].data, compression='gzip')
+        g.create_dataset('indptr', data=sim_result[2].indptr, compression='gzip')
+        g.create_dataset('indices', data=sim_result[2].indices, compression='gzip')
+        g.attrs['shape'] = sim_result[2].shape
+
+        # Saving other outputs
         h5_file.create_dataset('EigenValues/' + sim_result[1], data=sim_result[4])
         h5_file.create_dataset('ProbVec/' + sim_result[1], data=sim_result[5])
         h5_file.create_dataset('Prob2D/' + sim_result[1], data=sim_result[6])
@@ -55,10 +57,14 @@ def output_handler(sim_results):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--parameter", dest="parameterFile", help="Parameter csv file that contains the parameters for the simulations.", required=True)
-    parser.add_argument("-o", "--output", dest="outputPath", help="Folder path to output simulation results to.", required=True)
-    parser.add_argument("-m", "--model", dest="modelFile", help="Model file used to determine and calculate the RateMatrix, placed inside models/ folder.", required=True)
-    parser.add_argument("-pe", "--parallel", dest="runParallel", action='store_true', help="When -pe called, simulations will attempt to be run in parallel")
+    parser.add_argument("-p", "--parameter", dest="parameterFile",
+                        help="Parameter csv file that contains the parameters for the simulations.", required=True)
+    parser.add_argument("-o", "--output", dest="outputPath",
+                        help="Folder path to output simulation results to.", required=True)
+    parser.add_argument("-m", "--model", dest="modelFile",
+                        help="Model file used to calculate the RateMatrix, found in models/ .", required=True)
+    parser.add_argument("-pe", "--parallel", dest="runParallel", action='store_true',
+                        help="When -pe called, simulations will attempt to be run in parallel")
 
     # Load inputs
     args = parser.parse_args()
