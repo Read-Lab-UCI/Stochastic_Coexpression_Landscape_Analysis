@@ -5,7 +5,6 @@ import h5py
 import multiprocessing as mp
 import numpy as np
 import pandas as pd
-import scipy.io as sio
 
 from RateMatrix_Calcs import basic_calcs
 
@@ -31,10 +30,10 @@ def wrapper(row):
 
     # Saving
     #sio.savemat(os.path.join(rateMatrixPath, saveFileName), {'RateMatrix': RateMatrix, 'Dimensions': Dimensions}, do_compression = True)
-    #sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
-    #sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
-    #sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
-    #sio.savemat(os.path.join(timeScalesPath, saveFileName), {'TimeScales': timeScales})
+    # #sio.savemat(os.path.join(eigenValuesPath, saveFileName), {'EigenValues': eigenValues})
+    # #sio.savemat(os.path.join(probVecPath, saveFileName), {'ProbVec': probVec})
+    # #sio.savemat(os.path.join(prob2DPath, saveFileName), {'Prob2d': prob2D})
+    # #sio.savemat(os.path.join(timeScalesPath, saveFileName), {'TimeScales': timeScales})
 
     if not os.path.isfile(statesDictPath):
         np.save(os.path.join(outputPath, 'StatesDict.npy'), StatesDict)
@@ -43,9 +42,14 @@ def wrapper(row):
 
 def output_handler(sim_results):
     h5_save_path = os.path.join(sim_results[0][0], 'simulation_data.h5')
-    f = h5py.File(h5_save_path, "a")
-    f.create_dataset('ProbVec/'+sim_results[0][1], data=sim_results[0][5])
-    f.close()
+    h5_file = h5py.File(h5_save_path, "a")
+
+    for sim_result in sim_results:
+        h5_file.create_dataset('EigenValues/' + sim_result[1], data=sim_result[4])
+        h5_file.create_dataset('ProbVec/' + sim_result[1], data=sim_result[5])
+        h5_file.create_dataset('Prob2D/' + sim_result[1], data=sim_result[6])
+        h5_file.create_dataset('TimeScales/' + sim_result[1], data=sim_result[7])
+    h5_file.close()
 
 
 if __name__ == '__main__':
@@ -63,6 +67,9 @@ if __name__ == '__main__':
     outputPath = os.path.abspath(args.outputPath)
     parametersDF['OutputPath'] = outputPath
 
+    # Number of simulations each worker will run
+    chunk_size = 4
+
     global modelFunc
     modelFunc = importlib.import_module(modelFile)
 
@@ -78,8 +85,9 @@ if __name__ == '__main__':
         pool = mp.Pool(processes=num_workers)
 
         # Distributing tasks and executing
-        for row in parametersDF.itertuples(name=None):
-            pool.map_async(wrapper, (row, ), callback=output_handler)
+        for i in range(0, len(parametersDF), chunk_size):
+            slc = parametersDF.iloc[i: i+chunk_size]
+            pool.map_async(wrapper, slc.itertuples(name=None), callback=output_handler)
         pool.close()
         pool.join()
 
