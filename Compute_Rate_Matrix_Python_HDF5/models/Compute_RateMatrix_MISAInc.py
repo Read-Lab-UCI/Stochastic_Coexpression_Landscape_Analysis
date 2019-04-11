@@ -2,6 +2,7 @@ import numpy as np
 from scipy.sparse import coo_matrix
 from .common_calcs import Update_RateMatrix
 
+
 def MISA_Inc_Rxn(parameters):
     # Parameters and model name
     model = 'MISAInc'
@@ -181,6 +182,6 @@ def main(inputs):
     Rxn, A, B, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States = MISA_Inc_Rxn(inputs)
     Dimensions = [len(A), len(B), len(GeneA_States), len(GeneB_States)]
     StatesDict = Determine_StatesDict(Dimensions, GeneA_States, GeneB_States)
-    RateMatrix = Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn)
+    RateMatrix = Calc_RateMatrix(Rxn, StatesDict, NumStates, NumRxn)
 
     return RateMatrix, Dimensions, StatesDict

@@ -43,7 +43,6 @@ def wrapper(row):
         np.save(os.path.join(outputPath, 'StatesDict.npy'), StatesDict)
 
 
-
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()

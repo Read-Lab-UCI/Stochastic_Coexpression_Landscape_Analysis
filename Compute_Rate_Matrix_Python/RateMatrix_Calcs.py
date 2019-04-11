@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse.linalg import eigs
 
+
 def basic_calcs(matrix, dimensions, dims_to_reduce=(2,3), nsig=15, sigma=1e-12):
     dim = matrix.shape[0]
     eigen_values, right_eigen_vectors = eigs(matrix, k=nsig, sigma=sigma, v0=np.ones(dim))

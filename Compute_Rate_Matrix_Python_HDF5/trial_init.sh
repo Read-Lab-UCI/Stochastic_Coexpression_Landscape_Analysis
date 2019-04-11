@@ -1,6 +1,6 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/MISAInc_method_testing.csv
-RUNPARALLEL=false # set this to true or false to attempt parallel ratematrix calculations
+PARAM_CSV=parameter_files/paramValues_3.csv
+RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_MISAInc # Python filename that calculates ratematrix, called from models/ folder
 
 RESULTSDIR="../Simulation_Results/"
@@ -9,7 +9,7 @@ FILENAME=Trial
 FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | wc -l)
 FILES="$(echo "$FILES" | sed -e 's/^[ \t]*//')"
 
-if [ "$FILES" != "0" ] ; then
+if [[ "$FILES" != "0" ]] ; then
     echo Creating new trial folder
 	
 	LATEST=$(basename "$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | tail -1)") #Gets latest trial folder
@@ -37,8 +37,8 @@ mkdir "$NEWFOLDER"/Analysis
 
 cp ${PARAM_CSV} "${NEWFOLDER}"/paramValues.csv
 
-if [ "$RUNPARALLEL" = true ]; then
-    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -pe -m $MODEL_FILE
+if [[ "$RUNPARALLEL" = true ]]; then
+    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -pe -m ${MODEL_FILE}
 else
-    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -m $MODEL_FILE
+    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -m ${MODEL_FILE}
 fi
