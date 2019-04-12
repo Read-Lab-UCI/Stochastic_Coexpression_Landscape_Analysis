@@ -79,12 +79,12 @@ if __name__ == '__main__':
     global modelFunc
     modelFunc = importlib.import_module(modelFile)
 
-    if args.runParallel:
-        # Creating blank hdf5 file
-        savePathHDF5 = os.path.join(outputPath, 'simulation_data.h5')
-        f = h5py.File(savePathHDF5, "w")
-        f.close()
+    # Creating blank hdf5 file
+    savePathHDF5 = os.path.join(outputPath, 'simulation_data.h5')
+    f = h5py.File(savePathHDF5, "w")
+    f.close()
 
+    if args.runParallel:
         # Getting worker count and initiating pool
         num_workers = _workers_count()
         print('Starting pool with', num_workers, 'workers')
@@ -99,5 +99,7 @@ if __name__ == '__main__':
 
     else:
         print('Running simulations sequentially')
-        for row in parametersDF.itertuples(name=None):
-            wrapper(row)
+        for i in range(0, len(parametersDF), chunk_size):
+            slc = parametersDF.iloc[i: i+chunk_size]
+            sequential_sim_results = [wrapper(row) for row in slc.itertuples(name=None)]
+            output_handler(sequential_sim_results)
