@@ -21,7 +21,7 @@ def _workers_count():
 def wrapper(row):
     statesDictPath = os.path.join(outputPath, 'StatesDict.npy')
     set_formatted = 'set_{:05}'.format(row[0])
-    
+
     # Calculating
     RateMatrix, Dimensions, StatesDict = modelFunc.main(row)
     eigenValues, probVec, prob2D, timeScales = basic_calcs(RateMatrix, Dimensions)
@@ -45,6 +45,7 @@ def output_handler(sim_results):
         g.create_dataset('indptr', data=sim_result[2].indptr, compression='gzip')
         g.create_dataset('indices', data=sim_result[2].indices, compression='gzip')
         g.attrs['shape'] = sim_result[2].shape
+        g.attrs['dimensions'] = sim_result[3]
 
         # Saving other outputs
         h5_file.create_dataset('EigenValues/' + sim_result[1], data=sim_result[4])
