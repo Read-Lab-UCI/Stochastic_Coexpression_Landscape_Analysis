@@ -177,7 +177,8 @@ for ii=1:numel(A);
                         law=Rxn.Law(mm,:);
                         % Compute the reaction propensity using parameters and rate laws
                         rate0=ones(NumSpec,1);
-                        rate0=(Cur.^law-max(law-1,0).*Cur.^(max(law-1,0)))./max(1,law);
+                        %rate0=(Cur.^law-max(law-1,0).*Cur.^(max(law-1,0)))./max(1,law);
+                        rate0=Cur.^law./factorial(law);
                         Rate=par*prod(rate0);   
                         % Place the computed propensity in the Rate Matrix
                         RateMatrix(DestInd,CurInd)=RateMatrix(DestInd,CurInd)+Rate;

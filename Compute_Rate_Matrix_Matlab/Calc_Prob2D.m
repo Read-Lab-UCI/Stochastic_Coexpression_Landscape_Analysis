@@ -22,6 +22,12 @@ dim=size(RateMatrix);
 % Calculating and saving probvec
 ProbVec=RightEigenVectors(:,1)/sum(RightEigenVectors(:,1));
 
+% Saving entropy to text file for checking against python version
+Svalue = real(-sum(ProbVec.*log(ProbVec)));
+EntropyFile = strcat(trialFolder,'/','sValues.txt');
+dlmwrite(EntropyFile,Svalue,'-append');
+% #####
+
 % Calculating TimeScales
 EigenVals_r=real(diag(EigenValues));
 TimeScales=-1./EigenVals_r(2:end);
