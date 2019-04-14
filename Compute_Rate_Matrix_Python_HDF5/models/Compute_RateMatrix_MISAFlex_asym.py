@@ -4,17 +4,21 @@ from .common_calcs import Update_RateMatrix
 
 def MISA_Flex_Rxn(parameters):
     # Parameters and model name
-    model = 'MISAInc'
+    model = 'MISAFlex'
     N = parameters[1]
     kd = parameters[2]
-    g_a = parameters[3]
-    g_b = parameters[4]
-    g_c = parameters[5]
-    g_d = parameters[6]
-    ha = parameters[7]
-    hr = parameters[8]
-    fa = parameters[9]
-    fr = parameters[10]
+    g0_a = parameters[3]
+    g1_a = parameters[4]
+    g2_a = parameters[5]
+    g3_a = parameters[6]
+    g0_b = parameters[7]
+    g1_b = parameters[8]
+    g2_b = parameters[9]
+    g3_b = parameters[10]
+    ha = parameters[11]
+    hr = parameters[12]
+    fa = parameters[13]
+    fr = parameters[14]
     model_name = model + '_N{}'.format(N)
 
     # Copy number lists
@@ -35,8 +39,8 @@ def MISA_Flex_Rxn(parameters):
     NumRxn = 26
     NumSpec = 10
 
-    Rxn['Parameters'] = np.array([g_a,g_b,g_c,g_d,ha,hr,hr,ha,fa,fr,fa,fr,kd,
-                                  g_a,g_b,g_c,g_d,ha,hr,hr,ha,fa,fr,fa,fr,kd])
+    Rxn['Parameters'] = np.array([g0_a,g1_a,g2_a,g3_a,ha,hr,hr,ha,fa,fr,fa,fr,kd,
+                                  g0_b,g1_b,g2_b,g3_b,ha,hr,hr,ha,fa,fr,fa,fr,kd])
     Rxn['Law'] = np.zeros((NumRxn, NumSpec), dtype=int)
     Rxn['Stoich'] = np.zeros((NumRxn, NumSpec), dtype=int)
 
