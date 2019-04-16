@@ -23,7 +23,7 @@ if __name__ == "__main__":
         csvFileName=sys.argv[1]
         print('csv file will placed in {}, be sure to change the PARAM_CSV variable in the trial_init.sh  script to refer to this name. By default trial_init looks for paramValues.csv'.format(csvFileName))
 
-    synthesis_values = np.array([0.01, 7.0])
+    synthesis_values = np.array([0.01, 4.0])
     binding_values = np.array([1.00000000e-05, 1.00000000e-03, 1.00000000e-01, 1.00000000e+01, 1.00000000e+03])
     
     # Creating logic variation portion
