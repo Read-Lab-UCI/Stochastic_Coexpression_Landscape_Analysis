@@ -2,6 +2,10 @@ import numpy as np
 from scipy.sparse import coo_matrix
 from .common_calcs import Update_RateMatrix
 
+
+def model_name():
+    return 'MISAEx'
+
 def MISA_Ex_Rxn(parameters):
     # Parameters and model name
     model = 'MISAEx'

@@ -2,9 +2,13 @@ import numpy as np
 from scipy.sparse import coo_matrix
 from .common_calcs import Update_RateMatrix
 
+
+def model_name():
+    return 'MISAFlex'
+
 def MISA_Flex_Rxn(parameters):
     # Parameters and model name
-    model = 'MISAInc'
+    model = 'MISAFlex'
     N = parameters[1]
     kd = parameters[2]
     g_a = parameters[3]

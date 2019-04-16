@@ -83,6 +83,7 @@ if __name__ == '__main__':
     # Creating blank hdf5 file
     savePathHDF5 = os.path.join(outputPath, 'simulation_data.h5')
     f = h5py.File(savePathHDF5, "w")
+    f.attrs['model_name'] = modelFunc.model_name()
     f.close()
 
     if args.runParallel:

@@ -3,6 +3,10 @@ from scipy.sparse import coo_matrix
 from .common_calcs import Update_RateMatrix
 
 
+def model_name():
+    return 'MISAInc'
+
+
 def MISA_Inc_Rxn(parameters):
     # Parameters and model name
     model = 'MISAInc'
