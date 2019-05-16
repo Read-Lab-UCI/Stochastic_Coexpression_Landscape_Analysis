@@ -1,3 +1,4 @@
+import io
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -52,6 +53,43 @@ def plot_2d_heatmap(data, title=None, axis_labels=None, axis_tick_format='%.0f',
     if save_fig:
         plt.savefig(fig_name, transparent=True, bbox_inches='tight', pad_inches=0.1)
     plt.close()
+
+
+def plot_2d_heatmap_buffer(data, title=None, axis_labels=None, axis_tick_format='%.0f', force_matching_ticks=True, save_fig=False, fig_name='HeatMap.png', **kwargs):
+    rcparam()
+    font = {'fontsize': 20,
+            'fontweight' : 'bold',
+            'verticalalignment': 'baseline'}
+
+    # Figure Creation
+    fig, ax = plt.subplots()
+    if 'invert_color' in kwargs:
+        if kwargs['invert_color']:
+            plt.set_cmap('viridis_r')
+    if 'absolute_max' in kwargs:
+        cax = ax.pcolormesh(data, vmin=0., vmax=kwargs['absolute_max'])
+    else:
+        cax = ax.pcolormesh(data)
+    cbar = fig.colorbar(cax)
+
+    # Adding labels
+    if title:
+        plt.title(title, fontdict=font)
+    if axis_labels:
+        plt.xlabel(axis_labels[0])
+        plt.ylabel(axis_labels[1])
+    if force_matching_ticks:
+        xticks = ax.get_xticks()[0:-1]
+        ax.set_yticks(xticks)
+
+    ax.xaxis.set_major_formatter(FormatStrFormatter(axis_tick_format))
+    ax.yaxis.set_major_formatter(FormatStrFormatter(axis_tick_format))
+
+    buf = io.BytesIO()
+    if save_fig:
+        plt.savefig(buf, transparent=True, dpi=75, bbox_inches='tight', pad_inches=0.1, format='png')
+    plt.close()
+    return buf
 
 
 def plot_2d_heatmap_dynamic_axis(data, param_dict, plot_group, save_fig=False, fig_name='HeatMap.png'):
