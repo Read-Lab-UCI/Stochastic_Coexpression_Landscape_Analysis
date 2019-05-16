@@ -9,7 +9,7 @@ import pathlib
 from PIL import Image
 
 from module_tools import generate_2d_heatmap
-
+old_settings = np.seterr(all='ignore')
 
 def _workers_count():
     cpu_count = 1
