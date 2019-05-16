@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
         
         # Distributing tasks 
-        for setName in trialSetNames[:10]:
+        for setName in trialSetNames:
             prob2d = np.array(trialDataFile['Prob2D/'+setName])
             dimensions = np.array(trialDataFile['RateMatrix'][setName].attrs['dimensions'])
             argDict = {'prob2d': prob2d, 'dimensions': dimensions, 'set': setName, 'outputFile': savePathHDF5}
