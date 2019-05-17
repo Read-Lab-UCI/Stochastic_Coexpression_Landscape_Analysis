@@ -63,9 +63,11 @@ def plot_2d_heatmap_buffer(data, title=None, axis_labels=None, axis_tick_format=
 
     # Figure Creation
     fig, ax = plt.subplots()
-    if 'invert_color' in kwargs:
-        if kwargs['invert_color']:
-            plt.set_cmap('viridis_r')
+    if kwargs.get('invert_color', False):
+        plt.set_cmap('viridis_r')
+    else:
+        plt.set_cmap('viridis')
+
     if 'absolute_max' in kwargs:
         cax = ax.pcolormesh(data, vmin=0., vmax=kwargs['absolute_max'])
     else:
