@@ -112,7 +112,7 @@ if __name__ == "__main__":
             dimensions = np.array(trialDataFile['RateMatrix'][setName].attrs['dimensions'])
             argDict = {'prob2d': prob2d, 'dimensions': dimensions, 'set': setName, 'outputFile': savePathHDF5}
             results = wrapper(argDict)
-            output_handler(results)
+            output_handler([results,])
 
         # Closing simulation data file
         trialDataFile.close()
