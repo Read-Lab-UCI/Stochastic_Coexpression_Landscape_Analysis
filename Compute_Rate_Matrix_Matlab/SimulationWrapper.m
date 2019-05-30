@@ -19,7 +19,8 @@ for row = 1:size(parameters,1)
 	paramSetNum = int16(row); 
 
     %Value check in prompt
-	disp(['Values: ', num2str(paramSetNum), ', ' ,num2str(parameter_assignments('ha')), ',', num2str(parameter_assignments('hr')), ',', num2str(parameter_assignments('fa')),',', num2str(parameter_assignments('fr'))]) 
+	%disp(['Values: ', num2str(paramSetNum), ', ' ,num2str(parameter_assignments('ha')), ',', num2str(parameter_assignments('hr')), ',', num2str(parameter_assignments('fa')),',', num2str(parameter_assignments('fr'))]) 
+    disp('Values hardcoded')
 	
 	% Step 1: Specify the model and compute the Rate Matrix:
     % Everything about the model is specified in this script, outputs RateMatrix.mat and StatesList.mat
