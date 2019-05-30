@@ -24,8 +24,8 @@ def MISAChromatin_Rxn(parameters):
     fa = parameters[13]
     fr = parameters[14]
     c_c = parameters[15] # chromatin closing
-    c_cr = parameters[16] # chromatin opening
-    c_o = parameters[17] # chromatin closing with repressor bound
+    c_o = parameters[16] # chromatin opening
+    c_cr = parameters[17] # chromatin closing with repressor bound
     model_name = model + '_N{}'.format(N)
 
     # Copy number lists
@@ -51,6 +51,9 @@ def MISAChromatin_Rxn(parameters):
                                   g0_b,g1_b,g2_b,g3_b,ha,hr,hr,ha,fa,fr,fa,fr,kd, # Gene B reaction rates/parameters
                                   c_c,c_c,c_cr,c_c,c_o,                           # Gene A chromatin rates/parameters
                                   c_c,c_c,c_cr,c_c,c_o])                          # Gene B chromatin rates/parameters
+    #for i in Rxn['Parameters']:
+    #    print(i)
+    #print('')
     Rxn['Law'] = np.zeros((NumRxn, NumSpec), dtype=int)
     Rxn['Stoich'] = np.zeros((NumRxn, NumSpec), dtype=int)
 

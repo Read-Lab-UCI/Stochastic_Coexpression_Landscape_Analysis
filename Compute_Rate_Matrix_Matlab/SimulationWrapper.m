@@ -13,14 +13,14 @@ rateMatrixCalc = str2func(modelFile);
 parametersFile = strcat(trialFolder,'/','paramValues.csv');
 parameters = readtable(parametersFile);
 paramNames = parameters.Properties.VariableNames;
-
+tic
 for row = 1:size(parameters,1)
     parameter_assignments = containers.Map(paramNames, parameters(row,:).Variables);
 	paramSetNum = int16(row); 
 
     %Value check in prompt
 	%disp(['Values: ', num2str(paramSetNum), ', ' ,num2str(parameter_assignments('ha')), ',', num2str(parameter_assignments('hr')), ',', num2str(parameter_assignments('fa')),',', num2str(parameter_assignments('fr'))]) 
-    disp('Values hardcoded')
+    %disp('Values hardcoded')
 	
 	% Step 1: Specify the model and compute the Rate Matrix:
     % Everything about the model is specified in this script, outputs RateMatrix.mat and StatesList.mat
@@ -30,6 +30,5 @@ for row = 1:size(parameters,1)
 	Calc_Prob2D (RateMatrix, Dimensions, paramSetNum, trialFolder);
 
 end
-
-%exit
+toc
 end

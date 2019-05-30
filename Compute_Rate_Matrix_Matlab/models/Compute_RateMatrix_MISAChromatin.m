@@ -19,26 +19,27 @@ function [ ModelName, RateMatrix, Dimensions ] = Compute_RateMatrix_MISAInc( par
 % paramSetNum and trialFolder are for keeping track during multiple simulations.
 
 Model='MISAchromatin'; % Used for filenames 
-% N=parameters('N');
-% g0=parameters('g0');
-% g1=parameters('g1');
-% kd=parameters('kd');
-% ha=parameters('ha');
-% hr=parameters('hr');
-% fa=parameters('fa');
-% fr=parameters('fr');
+N=parameters('N');
+g0=parameters('g0');
+g1=parameters('g1');
+g2=parameters('g2');
+g3=parameters('g3');
 
-N=20;
-g0=0.001;
-g1=4;
-kd=1;
-ha=1E6;
-hr=1E2;
-fa=1E2;
-fr=1E6;
-c0=1E-5;
-c1=1E-3;
-co=c0;
+g0_b=parameters('g0_b');
+g1_b=parameters('g1_b');
+g2_b=parameters('g2_b');
+g3_b=parameters('g3_b');
+
+kd=parameters('kd');
+ha=parameters('ha');
+hr=parameters('hr');
+fa=parameters('fa');
+fr=parameters('fr');
+
+c_c = parameters('c_c');
+c_o = parameters('c_o');
+c_cr = parameters('c_cr');
+
 
 ModelName=strcat(Model,'_N',num2str(N));
 
@@ -77,9 +78,13 @@ NumSpec=12;  % Number of species: A,B,GeneA_00,GeneA_01,GeneA_10,GeneB_00,GeneB_
 
 % Reactions and Stoich represented in Rxn.Law and Rxn.Stoich are listed in MISA_Reactions_NonCompetitive.txt
 format long
-Parameters=[g0;g1;g0;g0;ha;hr;hr;ha;fa;fr;fa;fr;kd;g0;g1;g0;g0;ha;hr;hr;ha;fa;fr;fa;fr;kd];
-cPars=[c0;c0;c1;c0;co;c0;c0;c1;c0;co];
+Parameters=[g0;g1;g2;g3;ha;hr;hr;ha;fa;fr;fa;fr;kd;g0_b;g1_b;g2_b;g3_b;ha;hr;hr;ha;fa;fr;fa;fr;kd];
+cPars=[c_c;c_c;c_cr;c_c;c_o;c_c;c_c;c_cr;c_c;c_o];
 Parameters=[Parameters;cPars];
+%for i=1:length(Parameters)
+%    disp(num2str(Parameters(i)))
+%end
+%disp(' ')
 Rxn.Par=Parameters; % Rxn is a struct datatype that holds the model information
 
 % Reaction rate laws, number of each species involved in the reaction
@@ -234,25 +239,24 @@ for ii=1:numel(A);
     end;
 end;
 % Making columns in rate matrix sum to 0
-RateMatrix=RateMatrix-diag(sum(RateMatrix));
-[V,D]=eigs(RateMatrix,1,1E-12);
-ProbVec=V(:,1)/sum(V(:,1));
-%ProbVec(ProbVec<1E-6)=0;
-%ProbVec(ProbVec<0)=0;
-ProbFullD=zeros(Dimensions);
-ProbFullD(1:NS)=ProbVec;
-Prob2D=sum(sum(ProbFullD,3),4);
-L=size(Prob2D,1);
-LookProb2D=[[Prob2D,zeros(L,1)];zeros(1,L+1)];
-pcolor(-log10(LookProb2D))
-colormap(flipud(parula))
-axis square
-colorbar
+%RateMatrix=RateMatrix-diag(sum(RateMatrix));
+%[V,D]=eigs(RateMatrix,1,1E-12);
+%ProbVec=V(:,1)/sum(V(:,1));
+%%ProbVec(ProbVec<1E-6)=0;
+%%ProbVec(ProbVec<0)=0;
+%ProbFullD=zeros(Dimensions);
+%ProbFullD(1:NS)=ProbVec;
+%Prob2D=sum(sum(ProbFullD,3),4);
+%L=size(Prob2D,1);
+%LookProb2D=[[Prob2D,zeros(L,1)];zeros(1,L+1)];
+%pcolor(-log10(LookProb2D))
+%colormap(flipud(parula))
+%axis square
+%colorbar
 
 % Making columns in rate matrix sum to 0
-%RateMatrix=RateMatrix-diag(sum(RateMatrix));
+RateMatrix=RateMatrix-diag(sum(RateMatrix));
 
-paramSetNumFormatted = sprintf('set_%05d',paramSetNum);
 paramSetNumFormatted = sprintf('set_%05d',paramSetNum);
 MatrixFile=strcat(trialFolder, '/RateMatrix/', paramSetNumFormatted, '.mat');
 save(MatrixFile,'RateMatrix','Dimensions','parameters')
