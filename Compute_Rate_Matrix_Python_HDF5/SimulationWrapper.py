@@ -1,4 +1,5 @@
 import os
+import logging
 import argparse
 import importlib
 import h5py
@@ -55,6 +56,7 @@ def output_handler(sim_results):
         h5_file.create_dataset('Prob2D/' + sim_result[1], data=sim_result[6])
         h5_file.create_dataset('TimeScales/' + sim_result[1], data=sim_result[7])
     h5_file.close()
+    logging.info('Finished '+sim_results[-1][1])
 
 
 if __name__ == '__main__':
@@ -75,6 +77,16 @@ if __name__ == '__main__':
     parametersDF = pd.read_csv(args.parameterFile, index_col=0)
     outputPath = os.path.abspath(args.outputPath)
     parametersDF['OutputPath'] = outputPath
+
+    # Setting up logger
+    outputLogger = logging.getLogger()
+    outputLogger.setLevel(logging.DEBUG)
+    logOutputFile = os.path.join(outputPath, 'simulations.log')
+    formatter = logging.Formatter('%(message)s')
+    fh = logging.FileHandler(logOutputFile, 'w')
+    fh.setLevel(logging.INFO)
+    fh.setFormatter(formatter)
+    outputLogger.addHandler(fh)
 
     # Number of simulations each worker will run
     chunk_size = 4

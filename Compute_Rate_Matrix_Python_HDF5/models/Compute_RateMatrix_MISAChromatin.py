@@ -24,8 +24,8 @@ def MISAChromatin_Rxn(parameters):
     fa = parameters[13]
     fr = parameters[14]
     c_c = parameters[15] # chromatin closing
-    c_o = parameters[16] # chromatin opening
-    c_cr = parameters[17] # chromatin closing with repressor bound
+    c_cr = parameters[16] # chromatin opening
+    c_o = parameters[17] # chromatin closing with repressor bound
     model_name = model + '_N{}'.format(N)
 
     # Copy number lists

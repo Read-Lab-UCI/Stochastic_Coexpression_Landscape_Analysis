@@ -8,12 +8,12 @@ import scipy.io as sio
 # This script will determine the combinations of parameters
 
 # Values
-allParameters = ["N", "kd", "g0", "g1", "g2", "g3", "g0_b", "g1_b", "g2_b", "g3_b", "ha", "hr", "fa", "fr", "c_c", "c_o", "c_cr"]
+allParameters = ["N", "kd", "g0", "g1", "g2", "g3", "g0_b", "g1_b", "g2_b", "g3_b", "ha", "hr", "fa", "fr", "c_c", "c_cr", "c_o"]
 parametersToChange = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] # Indexes of the parameters to be varied in allParameters
 constants = {"N":20,
              "kd":1}  # The values for parameters not being varied
 
-bindingRateValues = [1, 1e1, 1e3, 1e5]
+bindingRateValues = [1e-1, 1e1, 1e3, 1e5]
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -25,10 +25,10 @@ if __name__ == "__main__":
 
     
     # Creating logic variation portion
-    productionMatrix_a = sio.loadmat('gmatrix_chromatin.mat')['gmatrix']
-    productionMatrix_b = sio.loadmat('gmatrix_chromatin.mat')['gmatrix']
-    productionMatrix = np.concatenate((productionMatrix_a, productionMatrix_b), axis=1)
-    productionMatrix = [tuple(i) for i in productionMatrix]
+    productionMatrix = np.array([[1e-3, 4.0, 1e-3, 1e-3, 1e-3, 4.0, 1e-3, 1e-3],
+                                 [1e-3, 7.0, 1e-3, 1e-3, 1e-3, 4.0, 1e-3, 1e-3],
+                                 [1e-3, 4.0, 1e-3, 1e-3, 1e-3, 7.0, 1e-3, 1e-3],
+                                 [1e-3, 7.0, 1e-3, 1e-3, 1e-3, 7.0, 1e-3, 1e-3]])
 
     # Creating binding variation portion
     bindingMatrix = list(itertools.product(bindingRateValues, repeat=4))
@@ -48,6 +48,6 @@ if __name__ == "__main__":
     
     for key in constants.keys():
         paramDF[key] = constants[key]
-    
+
     paramDF[[allParameters[i] for i in parametersToChange]] = paramMatrix
     paramDF.to_csv(csvFileName)
