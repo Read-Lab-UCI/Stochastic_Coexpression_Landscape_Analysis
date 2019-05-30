@@ -1,7 +1,7 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/MISAInc_method_testing.csv
+PARAM_CSV=parameter_files/paramValues_MISAChromatin_test.csv
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
-MODEL_FILE=Compute_RateMatrix_MISAInc # Python filename that calculates ratematrix, called from models/ folder
+MODEL_FILE=Compute_RateMatrix_MISAChromatin # Python filename that calculates ratematrix, called from models/ folder
 
 RESULTSDIR="../Simulation_Results/"
 FILENAME=Trial
