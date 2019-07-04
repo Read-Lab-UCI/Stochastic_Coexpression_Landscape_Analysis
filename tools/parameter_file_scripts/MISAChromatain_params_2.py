@@ -10,7 +10,7 @@ import scipy.io as sio
 # Values
 allParameters = ["N", "kd", "g0", "g1", "g2", "g3", "g0_b", "g1_b", "g2_b", "g3_b", "ha", "hr", "fa", "fr", "c_c", "c_cr", "c_o"]
 parametersToChange = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] # Indexes of the parameters to be varied in allParameters
-constants = {"N":20,
+constants = {"N":30,
              "kd":1}  # The values for parameters not being varied
 
 if __name__ == "__main__":
