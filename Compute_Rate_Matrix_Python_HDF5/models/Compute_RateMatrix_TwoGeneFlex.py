@@ -4,11 +4,11 @@ from .common_calcs import Update_RateMatrix
 
 
 def model_name():
-    return 'MISAChromatin'
+    return 'TwoGeneFlex'
 
-def MISAChromatin_Rxn(parameters):
+def TwoGeneFlex_Rxn(parameters):
     # Parameters and model name
-    model = 'MISAChromatin'
+    model = 'TwoGeneFlex'
     N = parameters[1]
     kd = parameters[2]
     g0_a = parameters[3]
@@ -196,7 +196,7 @@ def Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn):
     return RateMatrix
 
 def main(inputs):
-    Rxn, A, B, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States = MISAChromatin_Rxn(inputs)
+    Rxn, A, B, NumStates, NumSpec, NumRxn, GeneA_States, GeneB_States = TwoGeneFlex_Rxn(inputs)
     Dimensions = [len(A), len(B), len(GeneA_States), len(GeneB_States)]
     StatesDict = Determine_StatesDict(Dimensions, GeneA_States, GeneB_States)
     RateMatrix = Calc_RateMatrix( Rxn, StatesDict, NumStates, NumRxn)
