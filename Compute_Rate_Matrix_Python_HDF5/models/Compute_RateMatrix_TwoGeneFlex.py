@@ -23,9 +23,6 @@ def TwoGeneFlex_Rxn(parameters):
     hr = parameters[12]
     fa = parameters[13]
     fr = parameters[14]
-    c_c = parameters[15] # chromatin closing
-    c_cr = parameters[16] # chromatin opening
-    c_o = parameters[17] # chromatin closing with repressor bound
     model_name = model + '_N{}'.format(N)
 
     # Copy number lists
