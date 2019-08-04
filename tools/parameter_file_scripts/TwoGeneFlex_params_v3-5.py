@@ -88,7 +88,10 @@ if __name__ == "__main__":
                                  [7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00]])
 
     # Creating binding variation portion
-    bindingRateValues = [10**0, 10**1.5, 10**3, 10**4.5, 10**6]
+    #bindingRateValues = [10**0, 10**1.5, 10**3, 10**4.5, 10**6] # v3
+    #bindingRateValues = [10**-5, 10**-3, 10**-1, 10**1, 10**3] # v4
+    bindingRateValues = [10**0, 10**2, 10**4, 10**6, 10**8] # v5
+
     bindingMatrix = list(itertools.product(bindingRateValues, repeat=4))
     
     paramMatrix_seperated = list(itertools.product(productionMatrix, bindingMatrix))
