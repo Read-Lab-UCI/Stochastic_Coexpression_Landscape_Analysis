@@ -89,8 +89,9 @@ if __name__ == "__main__":
 
     # Creating binding variation portion
     #bindingRateValues = [10**0, 10**1.5, 10**3, 10**4.5, 10**6] # v3
-    #bindingRateValues = [10**-5, 10**-3, 10**-1, 10**1, 10**3] # v4
-    bindingRateValues = [10**0, 10**2, 10**4, 10**6, 10**8] # v5
+    #bindingRateValues = [10**0, 10**2, 10**4, 10**6, 10**8] # v4
+    bindingRateValues = [10**-5, 10**-3, 10**-1, 10**1, 10**3] # v5
+    print(bindingRateValues)
 
     bindingMatrix = list(itertools.product(bindingRateValues, repeat=4))
     

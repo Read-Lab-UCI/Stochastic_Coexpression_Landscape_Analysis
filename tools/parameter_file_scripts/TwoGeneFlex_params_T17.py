@@ -29,6 +29,7 @@ if __name__ == "__main__":
 
     # Creating binding variation portion
     expon = np.linspace(0, 6, 9)
+    print(expon)
     bindingRateValues = 10**expon
     print(bindingRateValues)
     bindingMatrix = list(itertools.product(bindingRateValues, repeat=4))
