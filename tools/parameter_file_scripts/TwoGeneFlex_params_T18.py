@@ -88,8 +88,8 @@ if __name__ == "__main__":
                                  [7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00, 7.e+00]])
 
     # Creating binding variation portion
-    bindingRateValues = [10**0, 10**2, 10**4, 10**6, 10**8] # v5
-    expon = np.linspace(0, 8, 9)
+    expon = np.linspace(-5, 2, 5)
+    print(expon)
     bindingRateValues = 10**expon
     print(bindingRateValues)
 
