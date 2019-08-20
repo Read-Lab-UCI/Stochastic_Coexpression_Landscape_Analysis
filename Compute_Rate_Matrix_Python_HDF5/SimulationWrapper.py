@@ -41,8 +41,6 @@ def output_handler(sim_results):
     for sim_result in sim_results:
         # Breaking down Rate Matrix to allow for HDF5 saving
         # See https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html for reconstruction info
-#        import scipy.io as sio
-#        sio.savemat('ratematrix_py.mat', {'RateMatrix':sim_result[2]})
         g = h5_file.create_group('RateMatrix/' + sim_result[1])
         g.create_dataset('data', data=sim_result[2].data, compression='gzip')
         g.create_dataset('indptr', data=sim_result[2].indptr, compression='gzip')
@@ -60,7 +58,6 @@ def output_handler(sim_results):
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--parameter", dest="parameterFile",
                         help="Parameter csv file that contains the parameters for the simulations.", required=True)
