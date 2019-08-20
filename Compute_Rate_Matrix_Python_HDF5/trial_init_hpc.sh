@@ -1,7 +1,8 @@
 #!/bin/bash
-PARAM_CSV=parameter_files/paramValues_MISAChromatin.csv
+module load anaconda/3.6-5.0.1
+PARAM_CSV=parameter_files/TwoGeneFlex_params_T20.csv
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
-MODEL_FILE=Compute_RateMatrix_MISAChromatin # Python filename that calculates ratematrix, called from models/ folder
+MODEL_FILE=Compute_RateMatrix_TwoGeneFlex # Python filename that calculates ratematrix, called from models/ folder
 
 RESULTSDIR="/pub/cgalliva/Simulation_Data-py"
 FILENAME=Trial

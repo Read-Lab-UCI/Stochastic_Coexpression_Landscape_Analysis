@@ -9,8 +9,8 @@ module load gcc/6.4.0
 module load Cluster_Defaults
 module load anaconda/3.6-5.0.1
 
-TRIALS_PATH="/Users/camerongallivan/Research_Data/Simulation_Data/"
-TRIAL_FOLDERS=("Trial_0021-py" "Trial_0022-py")
+TRIALS_PATH="/pub/cgalliva/Simulation_Data-py/"
+TRIAL_FOLDERS=("Trial_0023-py" "Trial_0024-py" "Trial_0025-py" "Trial_0026-py")
 
 for folder in "${TRIAL_FOLDERS[@]}"
 do
