@@ -33,8 +33,8 @@ def calc_sim_prob2d_stats(prob2d):
     mutual_info=np.sum(mutual_info_array)
     
     # Computing correlation coefficient from prob2D
-    x_vals = np.arange(0, 21, 1)
-    y_vals = np.arange(0, 21, 1)
+    x_vals = np.arange(0, prob2d.shape[1], 1)
+    y_vals = np.arange(0, prob2d.shape[0], 1)
     prob_x = np.sum(prob2d, axis=0)
     prob_y = np.sum(prob2d, axis=1)
     mean_x = np.sum(np.multiply(prob_x, x_vals))
