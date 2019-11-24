@@ -89,24 +89,33 @@ def create_analysis_h5(simdat_hdf5_path, analysis_hdf5_output_path):
     # Closing simdat file
     h5_file.close()
 
+    # Opening parametes dataframe
+    parameters_df = pd.read_csv(trial_path+'/paramValues.csv', index_col=0)
+
     # Cleaning probability data and calculating entropy's
     probvec_array_cleaned = np.abs(probvec_array + 1e-30)
     system_probvec_entropies = np.real(-np.sum(np.multiply(probvec_array_cleaned, np.log(probvec_array_cleaned)), axis=1))
     prob_2d_vector_array_cleaned = np.abs(prob_2d_vector_array)
     system_prob2d_entropies = np.real(-np.sum(np.multiply(prob_2d_vector_array_cleaned, np.log(prob_2d_vector_array_cleaned)), axis=1))
+    relative_binding_strength = np.log10((parameters_df.fa*parameters_df.hr)/(parameters_df.fr*parameters_df.ha))
+    X_a = np.log10((parameters_df.fa)/(parameters_df.ha))
+    X_r = np.log10((parameters_df.fr)/(parameters_df.hr))
 
     # Appending columns to parameter dataframe with new parameter set metrics
-    parameters_df = pd.read_csv(trial_path+'/paramValues.csv', index_col=0)
     parameters_df['model_name'] = model_name
     parameters_df['probvec_entropy'] = np.nan_to_num(system_probvec_entropies)
     parameters_df['prob2d_entropy'] = np.nan_to_num(system_prob2d_entropies)
     parameters_df['mutual_information'] = np.nan_to_num(mutual_info_array)
     parameters_df['correl_coefficient'] = np.nan_to_num(correl_coeff_array)
     parameters_df['coexpression'] = np.nan_to_num(co_exp_array)
+    parameters_df['relative_binding_strength'] = np.nan_to_num(relative_binding_strength)
+    parameters_df['X_a'] = np.nan_to_num(X_a)
+    parameters_df['X_r'] = np.nan_to_num(X_r)
     parameters_df['prob2d_vector'] = [row for row in prob_2d_vector_array]
     parameters_df['probvec_error']= np.array([(x < -1).any() for x in probvec_array])
     parameters_df['prob2d_error'] = np.array([(x < -1).any() for x in prob_2d_vector_array])
-    parameters_df['errored'] = parameters_df[['probvec_error', 'prob2d_error']].apply(lambda x: True if x.values.any() else False, axis=1)
+    
+    parameters_df['errored'] = parameters_df[['probvec_error', 'prob2d_error', 'prob2d_error']].apply(lambda x: True if x.values.any() else False, axis=1)
     
     # Getting logic columns and assigning logic_id
     logic_columns = get_logic_parameter_columns(model_name)
