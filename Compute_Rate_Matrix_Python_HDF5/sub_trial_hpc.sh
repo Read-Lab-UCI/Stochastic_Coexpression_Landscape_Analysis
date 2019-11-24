@@ -1,7 +1,7 @@
 #!/bin/bash
 #$ -S /bin/bash           # run with this shell
 #$ -N TwoGeneFlex         # this name shows in qstat
-#$ -q rxn,pub64              # run in this Q
+#$ -q rxn              # run in this Q
 #$ -pe openmp 32
 #$ -j y                   # specify where the error messages get written to
 #$ -cwd                   # run the job out of the current directory;
@@ -13,7 +13,7 @@ module load Cluster_Defaults
 module load openmpi-3.1.2/gcc-6.4.0
 module load anaconda/3.6-5.0.1
 
-PARAM_CSV=parameter_files/TwoGeneFlex_params_T25.csv
+PARAM_CSV=parameter_files/TwoGeneFlex_params_T30.csv
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_TwoGeneFlex # Python filename that calculates ratematrix, called from models/ folder
 
@@ -56,5 +56,6 @@ if [[ "$RUNPARALLEL" = true ]]; then
 else
     time python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -m ${MODEL_FILE}
 fi
+tail -n 1 $PARAM_CSV
 echo ${NEWFOLDER}
 echo $PARAM_CSV

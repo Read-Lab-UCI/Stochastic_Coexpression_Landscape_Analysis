@@ -1,6 +1,7 @@
 #!/bin/bash
 module load anaconda/3.6-5.0.1
-PARAM_CSV=parameter_files/TwoGeneFlex_params_T20.csv
+
+PARAM_CSV=parameter_files/TwoGeneFlex_params_T28.csv
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_TwoGeneFlex # Python filename that calculates ratematrix, called from models/ folder
 
@@ -39,7 +40,10 @@ mkdir "$NEWFOLDER"/Analysis
 cp ${PARAM_CSV} "${NEWFOLDER}"/paramValues.csv
 
 if [[ "$RUNPARALLEL" = true ]]; then
-    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -pe -m ${MODEL_FILE}
+    time python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -pe -m ${MODEL_FILE}
 else
-    python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -m ${MODEL_FILE}
+    time python SimulationWrapper.py -o "${NEWFOLDER}" -p "${PARAM_CSV}" -m ${MODEL_FILE}
 fi
+tail -n 1 $PARAM_CSV
+echo ${NEWFOLDER}
+echo $PARAM_CSV
