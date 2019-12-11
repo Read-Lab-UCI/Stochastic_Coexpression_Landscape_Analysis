@@ -2,9 +2,8 @@
 
 module load anaconda/3.6-5.0.1
 
-TRIALS_PATH="/pub/cgalliva/Simulation_Data-py/"
-#TRIAL_FOLDERS=("Trial_0028-py" "Trial_0029-py") 
-TRIAL_FOLDERS=("Trial_0029-py")
+TRIALS_PATH="../../Simulation_Data-py/"
+TRIAL_FOLDERS=("Trial_0028-py" "Trial_0029-py") 
 
 for folder in "${TRIAL_FOLDERS[@]}"
 do

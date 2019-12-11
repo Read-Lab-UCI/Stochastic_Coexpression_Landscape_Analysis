@@ -1,4 +1,0 @@
-module load gnu_parallel/20180522
-module load anaconda/3.6-5.0.1
-
-parallel --progress python script_plot_probability_and_quasipotential.py -c user_config_files/hpc_Trial_0022.cfg -s {} ::: {1..1296}
