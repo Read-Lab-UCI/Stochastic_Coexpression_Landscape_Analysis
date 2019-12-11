@@ -1,5 +1,5 @@
 #!/bin/bash
-TRIAL_PATH='/dfs3/pub/cgalliva/Simulation_Data-py/Trial_0008-py'
+TRIAL_PATH='../../Simulation_Data-py/Trial_0008-py'
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 
 echo Starting $TRIAL_PATH

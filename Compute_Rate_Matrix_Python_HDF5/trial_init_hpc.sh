@@ -5,7 +5,7 @@ PARAM_CSV=parameter_files/TwoGeneFlex_params_T28.csv
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_TwoGeneFlex # Python filename that calculates ratematrix, called from models/ folder
 
-RESULTSDIR="/pub/cgalliva/Simulation_Data-py"
+RESULTSDIR="../Simulation_Results"
 FILENAME=Trial
 
 FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | wc -l)

@@ -5,8 +5,6 @@
 #$ -pe openmp 32
 #$ -j y                   # specify where the error messages get written to
 #$ -cwd                   # run the job out of the current directory;
-#$ -m beas
-#$ -M cgalliva@uci.edu
 
 module load gcc/6.4.0 
 module load Cluster_Defaults
@@ -17,7 +15,7 @@ PARAM_CSV=parameter_files/TwoGeneFlex_params_T30.csv
 RUNPARALLEL=true # set this to true or false to attempt parallel ratematrix calculations
 MODEL_FILE=Compute_RateMatrix_TwoGeneFlex # Python filename that calculates ratematrix, called from models/ folder
 
-RESULTSDIR="/pub/cgalliva/Simulation_Data-py"
+RESULTSDIR="../Simulation_Results"
 FILENAME=Trial
 
 FILES=$(find "$RESULTSDIR/" -maxdepth 1 -name "$FILENAME*" | sort | wc -l)
